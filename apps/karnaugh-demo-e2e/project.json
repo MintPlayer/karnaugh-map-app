@@ -1,0 +1,9 @@
+{
+  "name": "karnaugh-demo-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/karnaugh-demo-e2e/src",
+  "implicitDependencies": ["karnaugh-demo"],
+  "// targets": "to see all targets run: nx show project karnaugh-demo-e2e --web",
+  "targets": {}
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@mintplayer/ng-karnaugh-map",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0"
+  },
+  "dependencies": {
+    "@mintplayer/quine-mccluskey": "0.0.1"
+  },
+  "sideEffects": false
+}

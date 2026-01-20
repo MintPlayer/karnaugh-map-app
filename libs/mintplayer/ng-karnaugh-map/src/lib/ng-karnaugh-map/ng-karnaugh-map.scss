@@ -1,0 +1,244 @@
+:host {
+  display: block;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.karnaugh-map-container {
+  --kmap-cell-size: 40px;
+  --kmap-border-color: #dee2e6;
+  --kmap-cell-bg: #ffffff;
+  --kmap-header-bg: #f8f9fa;
+  --kmap-one-bg: #d4edda;
+  --kmap-one-color: #155724;
+  --kmap-zero-bg: #f8d7da;
+  --kmap-zero-color: #721c24;
+  --kmap-dontcare-bg: #e2e3e5;
+  --kmap-dontcare-color: #383d41;
+  --kmap-undefined-bg: #ffffff;
+  --kmap-undefined-color: #6c757d;
+  --kmap-selected-bg: #fff3cd;
+  --kmap-selected-border: #ffc107;
+  --kmap-focus-outline: #0d6efd;
+  --kmap-text-color: #212529;
+
+  display: inline-grid;
+  gap: 0;
+  border: 1px solid var(--kmap-border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  outline: none;
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--kmap-focus-outline);
+  }
+
+  &.scrollable {
+    max-width: 100%;
+    max-height: 80vh;
+    overflow: auto;
+  }
+}
+
+.corner-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--kmap-cell-size);
+  min-height: var(--kmap-cell-size);
+  background: var(--kmap-header-bg);
+  border-right: 1px solid var(--kmap-border-color);
+  border-bottom: 1px solid var(--kmap-border-color);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--kmap-text-color);
+
+  &.empty {
+    font-weight: 700;
+  }
+
+  .col-vars {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 0.65rem;
+  }
+
+  .row-vars {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    font-size: 0.65rem;
+  }
+
+  .diagonal-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -50%;
+      width: 200%;
+      height: 1px;
+      background: var(--kmap-border-color);
+      transform: rotate(-45deg);
+      transform-origin: center;
+    }
+  }
+}
+
+.col-header,
+.row-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--kmap-cell-size);
+  min-height: var(--kmap-cell-size);
+  padding: 4px;
+  background: var(--kmap-header-bg);
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-family: 'Consolas', 'Monaco', monospace;
+  color: var(--kmap-text-color);
+  white-space: nowrap;
+}
+
+.col-header {
+  border-bottom: 1px solid var(--kmap-border-color);
+  border-right: 1px solid var(--kmap-border-color);
+
+  &:last-of-type {
+    border-right: none;
+  }
+}
+
+.row-header {
+  border-right: 1px solid var(--kmap-border-color);
+  border-bottom: 1px solid var(--kmap-border-color);
+}
+
+.cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--kmap-cell-size);
+  min-height: var(--kmap-cell-size);
+  background: var(--kmap-cell-bg);
+  border-right: 1px solid var(--kmap-border-color);
+  border-bottom: 1px solid var(--kmap-border-color);
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+
+  .cell-value {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .cell-minterm {
+    position: absolute;
+    bottom: 2px;
+    right: 3px;
+    font-size: 0.55rem;
+    color: #999;
+    opacity: 0.7;
+  }
+
+  // Cell value states
+  &.zero {
+    background: var(--kmap-zero-bg);
+    color: var(--kmap-zero-color);
+  }
+
+  &.one {
+    background: var(--kmap-one-bg);
+    color: var(--kmap-one-color);
+  }
+
+  &.dontcare {
+    background: var(--kmap-dontcare-bg);
+    color: var(--kmap-dontcare-color);
+  }
+
+  &.undefined {
+    background: var(--kmap-undefined-bg);
+    color: var(--kmap-undefined-color);
+  }
+
+  // Selection state
+  &.selected {
+    background: var(--kmap-selected-bg) !important;
+    box-shadow: inset 0 0 0 2px var(--kmap-selected-border);
+  }
+
+  // Focus state
+  &.focused {
+    outline: 2px dashed var(--kmap-focus-outline);
+    outline-offset: -2px;
+    z-index: 1;
+  }
+}
+
+// Grid layout based on number of columns
+// This is dynamically set via the component
+:host {
+  .karnaugh-map-container {
+    // Default 2x2 grid (2 variables)
+    grid-template-columns: auto repeat(2, minmax(var(--kmap-cell-size), 1fr));
+  }
+}
+
+// Dynamic grid columns based on data
+@for $i from 1 through 32 {
+  :host .karnaugh-map-container[data-cols='#{$i}'] {
+    grid-template-columns: auto repeat(#{$i}, minmax(var(--kmap-cell-size), 1fr));
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 600px) {
+  .karnaugh-map-container {
+    --kmap-cell-size: 32px;
+
+    .cell-minterm {
+      display: none;
+    }
+  }
+}
+
+// Dark mode support (when Bootstrap dark mode is active)
+@media (prefers-color-scheme: dark) {
+  .karnaugh-map-container {
+    --kmap-border-color: #495057;
+    --kmap-cell-bg: #212529;
+    --kmap-header-bg: #343a40;
+    --kmap-one-bg: #1e4620;
+    --kmap-one-color: #75b798;
+    --kmap-zero-bg: #4a1a1f;
+    --kmap-zero-color: #ea868f;
+    --kmap-dontcare-bg: #3d4045;
+    --kmap-dontcare-color: #adb5bd;
+    --kmap-undefined-bg: #212529;
+    --kmap-undefined-color: #6c757d;
+    --kmap-selected-bg: #4a3c00;
+    --kmap-selected-border: #ffc107;
+    --kmap-text-color: #f8f9fa;
+  }
+
+  .cell .cell-minterm {
+    color: #666;
+  }
+}

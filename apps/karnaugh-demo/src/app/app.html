@@ -1,0 +1,205 @@
+<div class="container py-4">
+  <header class="mb-4">
+    <h1 class="h2">Karnaugh Map Solver</h1>
+    <p class="text-muted">
+      Interactive Boolean logic minimization using the Quine-McCluskey algorithm
+    </p>
+  </header>
+
+  <!-- Variable Controls -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="card-title mb-0">Variables</h5>
+    </div>
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+        <div class="col-auto">
+          <label class="form-label">Number of Variables</label>
+          <div class="btn-group">
+            <button
+              class="btn btn-outline-secondary"
+              (click)="removeVariable()"
+              [disabled]="inputVariables.length <= 1"
+            >
+              <span>−</span>
+            </button>
+            <span class="btn btn-outline-secondary disabled">
+              {{ inputVariables.length }}
+            </span>
+            <button
+              class="btn btn-outline-secondary"
+              (click)="addVariable()"
+            >
+              <span>+</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="col">
+          <label class="form-label">Variable Names</label>
+          <div class="d-flex flex-wrap gap-2">
+            @for (variable of inputVariables; track $index) {
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                style="width: 60px"
+                [value]="variable"
+                (blur)="updateVariableName($index, $event)"
+                maxlength="3"
+              />
+            }
+          </div>
+        </div>
+
+        <div class="col-auto">
+          <label class="form-label">Output</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            style="width: 60px"
+            [(ngModel)]="outputVariable"
+            maxlength="3"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mode Toggle -->
+  <div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-0">Karnaugh Map</h5>
+      <div class="btn-group btn-group-sm">
+        <button
+          class="btn"
+          [class.btn-primary]="mode === EEditMode.Edit"
+          [class.btn-outline-primary]="mode !== EEditMode.Edit"
+          (click)="setMode(EEditMode.Edit)"
+        >
+          Edit
+        </button>
+        <button
+          class="btn"
+          [class.btn-primary]="mode === EEditMode.Solve"
+          [class.btn-outline-primary]="mode !== EEditMode.Solve"
+          (click)="setMode(EEditMode.Solve)"
+        >
+          Solve
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="mb-3 text-muted small">
+        @if (mode === EEditMode.Edit) {
+          <span>Click cells to toggle values: empty → 0 → 1 → X (don't care) → empty</span>
+        } @else {
+          <span>Click cells to select them for solving</span>
+        }
+      </div>
+
+      <!-- Karnaugh Map Component -->
+      <div class="d-flex justify-content-center mb-4">
+        <mintplayer-karnaugh-map
+          #kmap
+          [inputVariables]="inputVariables"
+          [outputVariable]="outputVariable"
+          [mode]="mode"
+          [cellSize]="48"
+          (solved)="onSolved($event)"
+        />
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-success" (click)="solve()">
+          Solve Automatically
+        </button>
+        <button class="btn btn-outline-secondary" (click)="clear()">
+          Clear
+        </button>
+        <div class="ms-auto d-flex gap-2">
+          <button class="btn btn-outline-secondary btn-sm" (click)="exportState()">
+            Export
+          </button>
+          <label class="btn btn-outline-secondary btn-sm mb-0">
+            Import
+            <input
+              type="file"
+              accept=".json"
+              class="d-none"
+              (change)="importState($event)"
+            />
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  @if (isSolved) {
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Result</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Sum of Products (SOP):</label>
+          <div class="d-flex gap-2 align-items-center">
+            <code class="flex-grow-1 p-2 bg-light rounded">
+              {{ onesExpression }}
+            </code>
+            <button
+              class="btn btn-sm btn-outline-secondary"
+              (click)="copyExpression(onesExpression)"
+              title="Copy to clipboard"
+            >
+              Copy
+            </button>
+          </div>
+        </div>
+
+        @if (zerosExpression && zerosExpression !== '1') {
+          <div>
+            <label class="form-label fw-semibold">Complement (zeros):</label>
+            <div class="d-flex gap-2 align-items-center">
+              <code class="flex-grow-1 p-2 bg-light rounded">
+                {{ zerosExpression }}
+              </code>
+              <button
+                class="btn btn-sm btn-outline-secondary"
+                (click)="copyExpression(zerosExpression)"
+                title="Copy to clipboard"
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Instructions -->
+  <div class="card mt-4">
+    <div class="card-header">
+      <h5 class="card-title mb-0">Instructions</h5>
+    </div>
+    <div class="card-body">
+      <ul class="mb-0">
+        <li>Use <strong>+/-</strong> buttons to add or remove variables</li>
+        <li>Click on cells to toggle their values (0, 1, X for don't care)</li>
+        <li>
+          Keyboard shortcuts (when map is focused):
+          <ul>
+            <li><kbd>Arrow keys</kbd> - Navigate cells</li>
+            <li><kbd>0</kbd>, <kbd>1</kbd>, <kbd>X</kbd> - Set cell value directly</li>
+            <li><kbd>Space</kbd> or <kbd>Enter</kbd> - Toggle cell value</li>
+            <li><kbd>Delete</kbd> - Clear cell</li>
+          </ul>
+        </li>
+        <li>Click <strong>Solve Automatically</strong> to minimize the Boolean function</li>
+        <li>The small numbers in cells show the minterm index</li>
+      </ul>
+    </div>
+  </div>
+</div>

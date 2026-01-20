@@ -1,0 +1,33 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.card {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+code {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 1rem;
+}
+
+kbd {
+  background-color: #212529;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.875rem;
+  border-radius: 0.25rem;
+}
+
+// Responsive adjustments
+@media (max-width: 576px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .btn-group-sm > .btn {
+    padding: 0.25rem 0.5rem;
+  }
+}

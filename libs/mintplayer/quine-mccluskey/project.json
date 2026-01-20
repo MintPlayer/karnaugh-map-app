@@ -1,0 +1,34 @@
+{
+  "name": "quine-mccluskey",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/mintplayer/quine-mccluskey/src",
+  "projectType": "library",
+  "release": {
+    "version": {
+      "manifestRootsToUpdate": ["dist/{projectRoot}"],
+      "currentVersionResolver": "git-tag",
+      "fallbackCurrentVersionResolver": "disk"
+    }
+  },
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/mintplayer/quine-mccluskey",
+        "main": "libs/mintplayer/quine-mccluskey/src/index.ts",
+        "tsConfig": "libs/mintplayer/quine-mccluskey/tsconfig.lib.json",
+        "assets": ["libs/mintplayer/quine-mccluskey/*.md"],
+        "format": ["cjs", "esm"],
+        "generatePackageJson": true,
+        "declaration": true
+      }
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
+      }
+    }
+  }
+}

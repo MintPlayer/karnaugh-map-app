@@ -1,0 +1,62 @@
+<div
+  class="karnaugh-map-container"
+  [class.scrollable]="enableScrolling && totalCells > scrollThreshold"
+  [style.--kmap-cell-size.px]="cellSize"
+  [attr.data-cols]="colCodes.length"
+  tabindex="0"
+  role="grid"
+  [attr.aria-label]="'Karnaugh map with ' + inputVariables.length + ' variables'"
+>
+  <!-- Variable labels in corner -->
+  @if (showGridLabels && rowBits > 0) {
+    <div class="corner-cell">
+      <span class="col-vars">{{ colVars.join('') }}</span>
+      <span class="row-vars">{{ rowVars.join('') }}</span>
+      <div class="diagonal-line"></div>
+    </div>
+  } @else {
+    <div class="corner-cell empty">
+      <span>{{ outputVariable }}</span>
+    </div>
+  }
+
+  <!-- Column headers -->
+  @if (showGridLabels) {
+    @for (code of colCodes; track $index) {
+      <div class="col-header" role="columnheader">
+        {{ formatGrayCode(code, colBits) }}
+      </div>
+    }
+  }
+
+  <!-- Grid rows -->
+  @for (row of cells; track $index; let rowIdx = $index) {
+    <!-- Row header -->
+    @if (showGridLabels && rowBits > 0) {
+      <div class="row-header" role="rowheader">
+        {{ formatGrayCode(rowCodes[rowIdx], rowBits) }}
+      </div>
+    }
+
+    <!-- Cells in this row -->
+    @for (cell of row; track cell.minterm; let colIdx = $index) {
+      <div
+        class="cell"
+        role="gridcell"
+        [class.zero]="cell.value === ECellValue.Zero"
+        [class.one]="cell.value === ECellValue.One"
+        [class.dontcare]="cell.value === ECellValue.DontCare"
+        [class.undefined]="cell.value === ECellValue.Undefined"
+        [class.selected]="cell.isSelected"
+        [class.focused]="isFocused(rowIdx, colIdx)"
+        [attr.aria-label]="getCellAriaLabel(cell)"
+        [attr.aria-selected]="cell.isSelected"
+        [attr.data-minterm]="cell.minterm"
+        (click)="onCellClick(cell)"
+      >
+        <span class="cell-value">{{ formatCellValue(cell.value) }}</span>
+        <span class="cell-minterm">{{ cell.minterm }}</span>
+      </div>
+    }
+  }
+</div>
