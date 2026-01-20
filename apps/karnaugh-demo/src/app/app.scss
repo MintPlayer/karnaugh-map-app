@@ -1,7 +1,7 @@
 :host {
   display: block;
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background-color: var(--bs-body-bg);
 }
 
 .card {
@@ -14,7 +14,8 @@ code {
 }
 
 kbd {
-  background-color: #212529;
+  background-color: var(--bs-emphasis-color);
+  color: var(--bs-body-bg);
   padding: 0.2rem 0.4rem;
   font-size: 0.875rem;
   border-radius: 0.25rem;
@@ -29,5 +30,12 @@ kbd {
 
   .btn-group-sm > .btn {
     padding: 0.25rem 0.5rem;
+  }
+}
+
+// Dark mode shadow adjustments
+@media (prefers-color-scheme: dark) {
+  .card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.25);
   }
 }

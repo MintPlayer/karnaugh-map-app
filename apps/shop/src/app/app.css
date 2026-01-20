@@ -1,8 +1,8 @@
 .app-header {
-  background: #2c3e50;
-  color: white;
+  background: var(--color-header-bg);
+  color: var(--color-header-text);
   padding: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px var(--color-shadow);
 }
 
 .app-header .container {
@@ -26,7 +26,7 @@
 }
 
 .app-header nav a {
-  color: white;
+  color: var(--color-header-text);
   text-decoration: none;
   font-size: 1rem;
   padding: 8px 16px;
@@ -35,21 +35,21 @@
 }
 
 .app-header nav a:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-header-hover);
 }
 
 .app-header nav a.active {
-  background: #3498db;
+  background: var(--color-header-active);
 }
 
 .app-main {
   min-height: calc(100vh - 140px);
-  background: #f5f5f5;
+  background: var(--color-background);
 }
 
 .app-footer {
-  background: #34495e;
-  color: white;
+  background: var(--color-footer-bg);
+  color: var(--color-footer-text);
   padding: 24px 0;
   text-align: center;
 }

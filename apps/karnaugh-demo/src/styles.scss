@@ -15,3 +15,82 @@ body {
 .container {
   max-width: 1200px;
 }
+
+/* Auto dark mode based on system preference */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Override Bootstrap light theme colors with dark theme */
+    --bs-body-color: #{$body-color-dark};
+    --bs-body-color-rgb: #{to-rgb($body-color-dark)};
+    --bs-body-bg: #{$body-bg-dark};
+    --bs-body-bg-rgb: #{to-rgb($body-bg-dark)};
+    --bs-emphasis-color: #{$body-emphasis-color-dark};
+    --bs-emphasis-color-rgb: #{to-rgb($body-emphasis-color-dark)};
+    --bs-secondary-color: #{$body-secondary-color-dark};
+    --bs-secondary-color-rgb: #{to-rgb($body-secondary-color-dark)};
+    --bs-secondary-bg: #{$body-secondary-bg-dark};
+    --bs-secondary-bg-rgb: #{to-rgb($body-secondary-bg-dark)};
+    --bs-tertiary-color: #{$body-tertiary-color-dark};
+    --bs-tertiary-color-rgb: #{to-rgb($body-tertiary-color-dark)};
+    --bs-tertiary-bg: #{$body-tertiary-bg-dark};
+    --bs-tertiary-bg-rgb: #{to-rgb($body-tertiary-bg-dark)};
+    --bs-primary-text-emphasis: #{tint-color($primary, 40%)};
+    --bs-secondary-text-emphasis: #{tint-color($secondary, 40%)};
+    --bs-success-text-emphasis: #{tint-color($success, 40%)};
+    --bs-info-text-emphasis: #{tint-color($info, 40%)};
+    --bs-warning-text-emphasis: #{tint-color($warning, 40%)};
+    --bs-danger-text-emphasis: #{tint-color($danger, 40%)};
+    --bs-light-text-emphasis: #{$gray-100};
+    --bs-dark-text-emphasis: #{$gray-300};
+    --bs-primary-bg-subtle: #{shade-color($primary, 80%)};
+    --bs-secondary-bg-subtle: #{shade-color($secondary, 80%)};
+    --bs-success-bg-subtle: #{shade-color($success, 80%)};
+    --bs-info-bg-subtle: #{shade-color($info, 80%)};
+    --bs-warning-bg-subtle: #{shade-color($warning, 80%)};
+    --bs-danger-bg-subtle: #{shade-color($danger, 80%)};
+    --bs-light-bg-subtle: #{$gray-800};
+    --bs-dark-bg-subtle: #{mix($gray-800, $black)};
+    --bs-primary-border-subtle: #{shade-color($primary, 40%)};
+    --bs-secondary-border-subtle: #{shade-color($secondary, 40%)};
+    --bs-success-border-subtle: #{shade-color($success, 40%)};
+    --bs-info-border-subtle: #{shade-color($info, 40%)};
+    --bs-warning-border-subtle: #{shade-color($warning, 40%)};
+    --bs-danger-border-subtle: #{shade-color($danger, 40%)};
+    --bs-light-border-subtle: #{$gray-700};
+    --bs-dark-border-subtle: #{$gray-800};
+    --bs-heading-color: #{$headings-color-dark};
+    --bs-link-color: #{$link-color-dark};
+    --bs-link-hover-color: #{$link-hover-color-dark};
+    --bs-link-color-rgb: #{to-rgb($link-color-dark)};
+    --bs-link-hover-color-rgb: #{to-rgb($link-hover-color-dark)};
+    --bs-code-color: #{$code-color-dark};
+    --bs-highlight-color: #{$mark-color-dark};
+    --bs-highlight-bg: #{$mark-bg-dark};
+    --bs-border-color: #{$border-color-dark};
+    --bs-border-color-translucent: #{$border-color-translucent-dark};
+    --bs-form-valid-color: #{$form-valid-color-dark};
+    --bs-form-valid-border-color: #{$form-valid-border-color-dark};
+    --bs-form-invalid-color: #{$form-invalid-color-dark};
+    --bs-form-invalid-border-color: #{$form-invalid-border-color-dark};
+  }
+
+  .form-control,
+  .form-select {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    border-color: var(--bs-border-color);
+  }
+
+  .card {
+    background-color: var(--bs-secondary-bg);
+    border-color: var(--bs-border-color);
+  }
+
+  .table {
+    --bs-table-color: var(--bs-body-color);
+    --bs-table-bg: transparent;
+    --bs-table-border-color: var(--bs-border-color);
+    --bs-table-striped-bg: #{rgba($white, 0.05)};
+    --bs-table-hover-bg: #{rgba($white, 0.075)};
+  }
+}
