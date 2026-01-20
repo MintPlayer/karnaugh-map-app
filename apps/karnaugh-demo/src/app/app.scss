@@ -13,6 +13,29 @@ code {
   font-size: 1rem;
 }
 
+// Clickable terms in expression formulas
+.expression {
+  .term {
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: rgba(255, 193, 7, 0.3);
+    }
+
+    &.active {
+      background-color: rgba(255, 193, 7, 0.4);
+    }
+
+    &.selected {
+      background-color: rgba(255, 193, 7, 0.5);
+      box-shadow: 0 0 0 2px #ffc107;
+    }
+  }
+}
+
 kbd {
   background-color: var(--bs-emphasis-color);
   color: var(--bs-body-bg);

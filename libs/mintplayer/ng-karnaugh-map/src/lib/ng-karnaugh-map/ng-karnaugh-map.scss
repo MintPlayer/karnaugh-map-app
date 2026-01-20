@@ -20,6 +20,11 @@
   --kmap-selected-border: #ffc107;
   --kmap-focus-outline: #0d6efd;
   --kmap-text-color: #212529;
+  --kmap-covered-ones-border: #28a745;
+  --kmap-covered-zeros-border: #dc3545;
+  --kmap-highlight-bg: rgba(255, 193, 7, 0.4);
+  --kmap-hatched-ones: #28a745;
+  --kmap-hatched-zeros: #dc3545;
 
   display: inline-grid;
   gap: 0;
@@ -190,6 +195,43 @@
     outline-offset: -2px;
     z-index: 1;
   }
+
+  // Coverage indicators (subtle borders to show which cells are covered by implicants)
+  &.covered-by-ones:not(.covered-by-zeros) {
+    box-shadow: inset 0 0 0 2px var(--kmap-covered-ones-border);
+  }
+
+  &.covered-by-zeros:not(.covered-by-ones) {
+    box-shadow: inset 0 0 0 2px var(--kmap-covered-zeros-border);
+  }
+
+  // Hatched pattern for don't care cells covered by both SOP and Complement
+  &.dontcare.covered-by-ones.covered-by-zeros {
+    background: repeating-linear-gradient(
+      45deg,
+      var(--kmap-hatched-ones) 0px,
+      var(--kmap-hatched-ones) 4px,
+      var(--kmap-hatched-zeros) 4px,
+      var(--kmap-hatched-zeros) 8px
+    );
+    color: #fff;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  }
+
+  // Cells covered by both but not don't care (show split border)
+  &.covered-by-ones.covered-by-zeros:not(.dontcare) {
+    box-shadow:
+      inset 2px 0 0 0 var(--kmap-covered-ones-border),
+      inset -2px 0 0 0 var(--kmap-covered-zeros-border),
+      inset 0 2px 0 0 var(--kmap-covered-ones-border),
+      inset 0 -2px 0 0 var(--kmap-covered-zeros-border);
+  }
+
+  // Highlighted state (when hovering or selecting a specific term)
+  &.highlighted {
+    background: var(--kmap-highlight-bg) !important;
+    box-shadow: inset 0 0 0 3px var(--kmap-selected-border) !important;
+  }
 }
 
 // Grid layout based on number of columns
@@ -236,6 +278,11 @@
     --kmap-selected-bg: #4a3c00;
     --kmap-selected-border: #ffc107;
     --kmap-text-color: #f8f9fa;
+    --kmap-covered-ones-border: #4ade80;
+    --kmap-covered-zeros-border: #f87171;
+    --kmap-highlight-bg: rgba(255, 193, 7, 0.3);
+    --kmap-hatched-ones: #22c55e;
+    --kmap-hatched-zeros: #ef4444;
   }
 
   .cell .cell-minterm {

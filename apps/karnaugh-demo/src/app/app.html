@@ -107,6 +107,8 @@
           [outputVariable]="outputVariable"
           [mode]="mode"
           [cellSize]="48"
+          [highlightedLoopIndex]="effectiveLoopIndex"
+          [highlightedLoopType]="effectiveLoopType"
           (solved)="onSolved($event)"
         />
       </div>
@@ -150,8 +152,22 @@
         <div class="mb-3">
           <label class="form-label fw-semibold">Sum of Products (SOP):</label>
           <div class="d-flex gap-2 align-items-center">
-            <code class="flex-grow-1 p-2 bg-light rounded">
-              {{ onesExpression }}
+            <code class="expression flex-grow-1 p-2 bg-light rounded">
+              @if (onesTerms.length === 0) {
+                {{ outputVariable }} = 0
+              } @else {
+                {{ outputVariable }} =
+                @for (term of onesTerms; track $index; let isLast = $last) {
+                  <span
+                    class="term"
+                    [class.active]="isTermActive($index, 'ones')"
+                    [class.selected]="isTermSelected($index, 'ones')"
+                    (mouseenter)="hoverTerm($index, 'ones')"
+                    (mouseleave)="unhoverTerm()"
+                    (click)="toggleSelectTerm($index, 'ones')"
+                  >{{ term }}</span>@if (!isLast) { + }
+                }
+              }
             </code>
             <button
               class="btn btn-sm btn-outline-secondary"
@@ -163,12 +179,22 @@
           </div>
         </div>
 
-        @if (zerosExpression && zerosExpression !== '1') {
+        @if (zerosTerms.length > 0) {
           <div>
             <label class="form-label fw-semibold">Complement (zeros):</label>
             <div class="d-flex gap-2 align-items-center">
-              <code class="flex-grow-1 p-2 bg-light rounded">
-                {{ zerosExpression }}
+              <code class="expression flex-grow-1 p-2 bg-light rounded">
+                {{ outputVariable }}' =
+                @for (term of zerosTerms; track $index; let isLast = $last) {
+                  <span
+                    class="term"
+                    [class.active]="isTermActive($index, 'zeros')"
+                    [class.selected]="isTermSelected($index, 'zeros')"
+                    (mouseenter)="hoverTerm($index, 'zeros')"
+                    (mouseleave)="unhoverTerm()"
+                    (click)="toggleSelectTerm($index, 'zeros')"
+                  >{{ term }}</span>@if (!isLast) { + }
+                }
               </code>
               <button
                 class="btn btn-sm btn-outline-secondary"

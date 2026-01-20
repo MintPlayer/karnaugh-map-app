@@ -7,6 +7,7 @@ import {
   EEditMode,
   IKarnaughMapSolvedEvent,
 } from '@mintplayer/ng-karnaugh-map';
+import { IRequiredLoop } from '@mintplayer/quine-mccluskey';
 import { BsCardModule } from '@mintplayer/ng-bootstrap/card';
 import { BsButtonGroupComponent } from '@mintplayer/ng-bootstrap/button-group';
 import { BsContainerComponent } from '@mintplayer/ng-bootstrap/container';
@@ -36,6 +37,18 @@ export class App {
   onesExpression = '';
   zerosExpression = '';
   isSolved = false;
+
+  // Loop data for interactive highlighting
+  onesLoops: IRequiredLoop[] = [];
+  zerosLoops: IRequiredLoop[] = [];
+  onesTerms: string[] = [];
+  zerosTerms: string[] = [];
+
+  // Hover and selection state for term highlighting
+  hoveredLoopIndex: number | null = null;
+  hoveredLoopType: 'ones' | 'zeros' | null = null;
+  selectedLoopIndex: number | null = null;
+  selectedLoopType: 'ones' | 'zeros' | null = null;
 
   // Expose enums to template
   readonly EEditMode = EEditMode;
@@ -91,7 +104,13 @@ export class App {
       await this.kmap.solveAutomatically();
       this.onesExpression = this.kmap.getOnesExpression();
       this.zerosExpression = this.kmap.getZerosExpression();
+      this.onesLoops = this.kmap.onesLoops;
+      this.zerosLoops = this.kmap.zerosLoops;
+      this.onesTerms = this.kmap.getOnesTerms();
+      this.zerosTerms = this.kmap.getZerosTerms();
       this.isSolved = true;
+      // Clear any previous selection
+      this.clearHighlight();
     }
   }
 
@@ -133,7 +152,88 @@ export class App {
   private clearResults(): void {
     this.onesExpression = '';
     this.zerosExpression = '';
+    this.onesLoops = [];
+    this.zerosLoops = [];
+    this.onesTerms = [];
+    this.zerosTerms = [];
     this.isSolved = false;
+    this.clearHighlight();
+  }
+
+  /**
+   * Gets the effective highlight (selected takes precedence over hovered).
+   */
+  get effectiveLoopIndex(): number | null {
+    return this.selectedLoopIndex !== null
+      ? this.selectedLoopIndex
+      : this.hoveredLoopIndex;
+  }
+
+  /**
+   * Gets the effective loop type (selected takes precedence over hovered).
+   */
+  get effectiveLoopType(): 'ones' | 'zeros' | null {
+    return this.selectedLoopIndex !== null
+      ? this.selectedLoopType
+      : this.hoveredLoopType;
+  }
+
+  /**
+   * Handles mouse enter on a term.
+   */
+  hoverTerm(index: number, type: 'ones' | 'zeros'): void {
+    this.hoveredLoopIndex = index;
+    this.hoveredLoopType = type;
+  }
+
+  /**
+   * Handles mouse leave on a term.
+   */
+  unhoverTerm(): void {
+    this.hoveredLoopIndex = null;
+    this.hoveredLoopType = null;
+  }
+
+  /**
+   * Toggles the selection of a term.
+   */
+  toggleSelectTerm(index: number, type: 'ones' | 'zeros'): void {
+    if (this.selectedLoopIndex === index && this.selectedLoopType === type) {
+      // Deselect if already selected
+      this.selectedLoopIndex = null;
+      this.selectedLoopType = null;
+    } else {
+      // Select this term
+      this.selectedLoopIndex = index;
+      this.selectedLoopType = type;
+    }
+  }
+
+  /**
+   * Clears all highlight states.
+   */
+  clearHighlight(): void {
+    this.hoveredLoopIndex = null;
+    this.hoveredLoopType = null;
+    this.selectedLoopIndex = null;
+    this.selectedLoopType = null;
+  }
+
+  /**
+   * Checks if a term is currently active (hovered or selected).
+   */
+  isTermActive(index: number, type: 'ones' | 'zeros'): boolean {
+    return (
+      (this.hoveredLoopIndex === index && this.hoveredLoopType === type) ||
+      (this.selectedLoopIndex === index && this.selectedLoopType === type)
+    );
+  }
+
+  /**
+   * Checks if a term is currently selected (locked).
+   */
+  isTermSelected(index: number, type: 'ones' | 'zeros'): boolean {
+    return this.selectedLoopIndex === index && this.selectedLoopType === type;
   }
 
   /**
