@@ -33,6 +33,10 @@ export default [
               onlyDependOnLibsWithTags: ['scope:api', 'scope:shared'],
             },
             {
+              sourceTag: 'scope:mintplayer',
+              onlyDependOnLibsWithTags: ['scope:mintplayer'],
+            },
+            {
               sourceTag: 'type:data',
               onlyDependOnLibsWithTags: ['type:data'],
             },

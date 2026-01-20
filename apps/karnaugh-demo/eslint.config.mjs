@@ -28,7 +28,11 @@ export default [
   },
   {
     files: ['**/*.html'],
-    // Override or add rules here
-    rules: {},
+    rules: {
+      // Informational labels and interactive spans for demo purposes
+      '@angular-eslint/template/label-has-associated-control': 'off',
+      '@angular-eslint/template/click-events-have-key-events': 'off',
+      '@angular-eslint/template/interactive-supports-focus': 'off',
+    },
   },
 ];

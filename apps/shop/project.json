@@ -85,14 +85,13 @@
       }
     },
     "serve-static": {
-      "continuous": true,
-      "executor": "@nx/web:file-server",
-      "options": {
-        "buildTarget": "shop:build",
-        "port": 4200,
-        "staticFilePath": "dist/apps/shop/browser",
-        "spa": true
-      }
+      "dependsOn": ["copy-index"],
+      "command": "npx http-server dist/apps/shop/browser -p 4300 -a localhost --proxy http://localhost:4300?"
+    },
+    "copy-index": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "command": "node -e \"require('fs').copyFileSync('dist/apps/shop/browser/index.csr.html', 'dist/apps/shop/browser/index.html')\""
     }
   }
 }

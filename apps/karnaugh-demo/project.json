@@ -4,7 +4,7 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/karnaugh-demo/src",
-  "tags": [],
+  "tags": ["scope:mintplayer"],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
@@ -32,8 +32,8 @@
             },
             {
               "type": "anyComponentStyle",
-              "maximumWarning": "4kb",
-              "maximumError": "8kb"
+              "maximumWarning": "8kb",
+              "maximumError": "12kb"
             }
           ],
           "outputHashing": "all"

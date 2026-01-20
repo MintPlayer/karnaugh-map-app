@@ -57,6 +57,12 @@ export class NgKarnaughMapComponent implements OnInit, OnChanges {
   /** Size of each cell in pixels */
   @Input() cellSize = 40;
 
+  /** Index of the loop to highlight (for interactive selection) */
+  @Input() highlightedLoopIndex: number | null = null;
+
+  /** Type of loop being highlighted ('ones' for SOP, 'zeros' for Complement) */
+  @Input() highlightedLoopType: 'ones' | 'zeros' | null = null;
+
   /** Enable scrolling for large maps */
   @Input() enableScrolling = true;
 
@@ -571,5 +577,48 @@ export class NgKarnaughMapComponent implements OnInit, OnChanges {
       loop.toString(this.inputVariables)
     );
     return `${this.outputVariable}' = ${terms.join(' + ')}`;
+  }
+
+  /**
+   * Gets the individual terms for the ones (SOP) expression.
+   */
+  getOnesTerms(): string[] {
+    return this.onesLoops.map((loop) => loop.toString(this.inputVariables));
+  }
+
+  /**
+   * Gets the individual terms for the zeros (Complement) expression.
+   */
+  getZerosTerms(): string[] {
+    return this.zerosLoops.map((loop) => loop.toString(this.inputVariables));
+  }
+
+  /**
+   * Checks if a minterm is covered by any ones (SOP) loop.
+   */
+  isCoveredByOnes(minterm: number): boolean {
+    return this.onesLoops.some((loop) => loop.minterms.includes(minterm));
+  }
+
+  /**
+   * Checks if a minterm is covered by any zeros (Complement) loop.
+   */
+  isCoveredByZeros(minterm: number): boolean {
+    return this.zerosLoops.some((loop) => loop.minterms.includes(minterm));
+  }
+
+  /**
+   * Checks if a minterm is currently highlighted by the selected loop.
+   */
+  isHighlighted(minterm: number): boolean {
+    if (this.highlightedLoopIndex === null || this.highlightedLoopType === null) {
+      return false;
+    }
+
+    const loops =
+      this.highlightedLoopType === 'ones' ? this.onesLoops : this.zerosLoops;
+    const loop = loops[this.highlightedLoopIndex];
+
+    return loop ? loop.minterms.includes(minterm) : false;
   }
 }

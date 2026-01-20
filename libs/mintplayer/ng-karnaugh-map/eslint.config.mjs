@@ -9,7 +9,12 @@ export default [
       '@nx/dependency-checks': [
         'error',
         {
-          ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}'],
+          ignoredFiles: [
+            '{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}',
+            '{projectRoot}/vite.config.{js,ts,mjs,mts}',
+            '{projectRoot}/vitest.config.{js,ts,mjs,mts}',
+          ],
+          ignoredDependencies: ['vite', '@analogjs/vite-plugin-angular', '@nx/vite'],
         },
       ],
     },
@@ -26,7 +31,7 @@ export default [
         'error',
         {
           type: 'attribute',
-          prefix: 'lib',
+          prefix: 'mintplayer',
           style: 'camelCase',
         },
       ],
@@ -34,7 +39,7 @@ export default [
         'error',
         {
           type: 'element',
-          prefix: 'lib',
+          prefix: 'mintplayer',
           style: 'kebab-case',
         },
       ],
@@ -42,7 +47,10 @@ export default [
   },
   {
     files: ['**/*.html'],
-    // Override or add rules here
-    rules: {},
+    rules: {
+      // The component handles keyboard navigation via @HostListener on the container
+      '@angular-eslint/template/click-events-have-key-events': 'off',
+      '@angular-eslint/template/interactive-supports-focus': 'off',
+    },
   },
 ];
