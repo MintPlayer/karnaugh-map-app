@@ -34,9 +34,10 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium firefox webkit
 
-      # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
-      # - run: npx nx-cloud record -- echo Hello World
-      - run: npx nx run-many -t lint test build typecheck e2e
+      # Build first to ensure dist folders exist for typecheck
+      - run: npx nx run-many -t build
+      # Then run remaining tasks
+      - run: npx nx run-many -t lint test typecheck e2e
       # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
       - run: npx nx fix-ci
         if: always()

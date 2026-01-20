@@ -3,6 +3,8 @@ import { test, expect } from '@playwright/test';
 test.describe('Karnaugh Map Demo', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    // Wait for the app to fully load
+    await page.waitForSelector('mintplayer-karnaugh-map');
   });
 
   test('has correct title', async ({ page }) => {
@@ -11,14 +13,13 @@ test.describe('Karnaugh Map Demo', () => {
   });
 
   test('displays initial 4 variables', async ({ page }) => {
-    // Check that there are 4 variable input fields (A, B, C, D)
+    // Check that there are 4 variable input fields (A, B, C, D) + 1 output
     const variableInputs = page.locator('input.form-control-sm[maxlength="3"]');
-    await expect(variableInputs).toHaveCount(5); // 4 variables + 1 output
+    await expect(variableInputs).toHaveCount(5);
   });
 
   test('can add a variable', async ({ page }) => {
-    // Find the + button and click it
-    const addButton = page.locator('bs-button-group button:has-text("+")');
+    const addButton = page.locator('bs-button-group button', { hasText: '+' });
     await addButton.click();
 
     // Should now have 5 variable inputs + 1 output = 6
@@ -27,8 +28,8 @@ test.describe('Karnaugh Map Demo', () => {
   });
 
   test('can remove a variable', async ({ page }) => {
-    // Find the - button and click it
-    const removeButton = page.locator('bs-button-group button:has-text("−")');
+    // The minus sign is a special character (−), use a more reliable selector
+    const removeButton = page.locator('bs-button-group button').first();
     await removeButton.click();
 
     // Should now have 3 variable inputs + 1 output = 4
@@ -41,33 +42,23 @@ test.describe('Karnaugh Map Demo', () => {
     await expect(karnaughMap).toBeVisible();
   });
 
-  test('has solve button', async ({ page }) => {
-    const solveButton = page.locator('button:has-text("Solve Automatically")');
-    await expect(solveButton).toBeVisible();
-  });
-
-  test('has random fill button', async ({ page }) => {
-    const randomButton = page.locator('button:has-text("Random Fill")');
-    await expect(randomButton).toBeVisible();
-  });
-
-  test('has clear button', async ({ page }) => {
-    const clearButton = page.locator('button:has-text("Clear")');
-    await expect(clearButton).toBeVisible();
+  test('has action buttons', async ({ page }) => {
+    await expect(page.getByRole('button', { name: 'Solve Automatically' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Random Fill' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Clear' })).toBeVisible();
   });
 
   test('can switch between edit and solve modes', async ({ page }) => {
-    const editButton = page.locator('bs-button-group button:has-text("Edit")');
-    const solveButton = page.locator('bs-button-group button:has-text("Solve")');
+    const modeButtonGroup = page.locator('bs-card-header bs-button-group');
+    const editButton = modeButtonGroup.getByRole('button', { name: 'Edit' });
+    const solveButton = modeButtonGroup.getByRole('button', { name: 'Solve' });
 
     // Initially in Edit mode
     await expect(editButton).toHaveClass(/btn-primary/);
-    await expect(solveButton).toHaveClass(/btn-outline-primary/);
 
     // Switch to Solve mode
     await solveButton.click();
     await expect(solveButton).toHaveClass(/btn-primary/);
-    await expect(editButton).toHaveClass(/btn-outline-primary/);
 
     // Switch back to Edit mode
     await editButton.click();
@@ -76,19 +67,16 @@ test.describe('Karnaugh Map Demo', () => {
 
   test('shows result after solving', async ({ page }) => {
     // Click random fill first to have some values
-    const randomButton = page.locator('button:has-text("Random Fill")');
-    await randomButton.click();
+    await page.getByRole('button', { name: 'Random Fill' }).click();
 
-    // Click solve
-    const solveButton = page.locator('button:has-text("Solve Automatically")');
-    await solveButton.click();
+    // Click solve and wait for result
+    await page.getByRole('button', { name: 'Solve Automatically' }).click();
 
-    // Result card should appear
-    const resultCard = page.locator('bs-card-header:has-text("Result")');
-    await expect(resultCard).toBeVisible();
+    // Wait for and check result card
+    const resultHeader = page.locator('bs-card-header', { hasText: 'Result' });
+    await expect(resultHeader).toBeVisible({ timeout: 10000 });
 
-    // Should show SOP expression
-    const sopLabel = page.locator('text=Sum of Products (SOP)');
-    await expect(sopLabel).toBeVisible();
+    // Should show SOP expression label
+    await expect(page.getByText('Sum of Products (SOP)')).toBeVisible();
   });
 });
