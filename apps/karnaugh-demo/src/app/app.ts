@@ -7,9 +7,19 @@ import {
   EEditMode,
   IKarnaughMapSolvedEvent,
 } from '@mintplayer/ng-karnaugh-map';
+import { BsCardModule } from '@mintplayer/ng-bootstrap/card';
+import { BsButtonGroupComponent } from '@mintplayer/ng-bootstrap/button-group';
+import { BsContainerComponent } from '@mintplayer/ng-bootstrap/container';
 
 @Component({
-  imports: [CommonModule, FormsModule, NgKarnaughMapComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgKarnaughMapComponent,
+    BsCardModule,
+    BsButtonGroupComponent,
+    BsContainerComponent,
+  ],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -98,6 +108,21 @@ export class App {
   clear(): void {
     if (this.kmap) {
       this.kmap.reset();
+      this.clearResults();
+    }
+  }
+
+  /**
+   * Fills the map with random values.
+   */
+  randomFill(): void {
+    if (this.kmap) {
+      const numCells = Math.pow(2, this.inputVariables.length);
+      const values = [ECellValue.Zero, ECellValue.One, ECellValue.DontCare];
+      for (let i = 0; i < numCells; i++) {
+        const randomValue = values[Math.floor(Math.random() * values.length)];
+        this.kmap.setValue(i, randomValue);
+      }
       this.clearResults();
     }
   }

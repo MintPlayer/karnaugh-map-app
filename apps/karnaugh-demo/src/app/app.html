@@ -1,4 +1,4 @@
-<div class="container py-4">
+<bs-container class="d-block p-4">
   <header class="mb-4">
     <h1 class="h2">Karnaugh Map Solver</h1>
     <p class="text-muted">
@@ -7,15 +7,15 @@
   </header>
 
   <!-- Variable Controls -->
-  <div class="card mb-4">
-    <div class="card-header">
+  <bs-card class="d-block mb-3">
+    <bs-card-header>
       <h5 class="card-title mb-0">Variables</h5>
-    </div>
+    </bs-card-header>
     <div class="card-body">
       <div class="row g-3 align-items-end">
         <div class="col-auto">
-          <label class="form-label">Number of Variables</label>
-          <div class="btn-group">
+          <label class="form-label me-3">Number of Variables</label>
+          <bs-button-group>
             <button
               class="btn btn-outline-secondary"
               (click)="removeVariable()"
@@ -32,7 +32,7 @@
             >
               <span>+</span>
             </button>
-          </div>
+          </bs-button-group>
         </div>
 
         <div class="col">
@@ -63,31 +63,33 @@
         </div>
       </div>
     </div>
-  </div>
+  </bs-card>
 
   <!-- Mode Toggle -->
-  <div class="card mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center">
-      <h5 class="card-title mb-0">Karnaugh Map</h5>
-      <div class="btn-group btn-group-sm">
-        <button
-          class="btn"
-          [class.btn-primary]="mode === EEditMode.Edit"
-          [class.btn-outline-primary]="mode !== EEditMode.Edit"
-          (click)="setMode(EEditMode.Edit)"
-        >
-          Edit
-        </button>
-        <button
-          class="btn"
-          [class.btn-primary]="mode === EEditMode.Solve"
-          [class.btn-outline-primary]="mode !== EEditMode.Solve"
-          (click)="setMode(EEditMode.Solve)"
-        >
-          Solve
-        </button>
+  <bs-card class="d-block mb-3">
+    <bs-card-header>
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">Karnaugh Map</h5>
+        <bs-button-group class="btn-group-sm">
+          <button
+            class="btn"
+            [class.btn-primary]="mode === EEditMode.Edit"
+            [class.btn-outline-primary]="mode !== EEditMode.Edit"
+            (click)="setMode(EEditMode.Edit)"
+          >
+            Edit
+          </button>
+          <button
+            class="btn"
+            [class.btn-primary]="mode === EEditMode.Solve"
+            [class.btn-outline-primary]="mode !== EEditMode.Solve"
+            (click)="setMode(EEditMode.Solve)"
+          >
+            Solve
+          </button>
+        </bs-button-group>
       </div>
-    </div>
+    </bs-card-header>
     <div class="card-body">
       <div class="mb-3 text-muted small">
         @if (mode === EEditMode.Edit) {
@@ -114,6 +116,9 @@
         <button class="btn btn-success" (click)="solve()">
           Solve Automatically
         </button>
+        <button class="btn btn-outline-primary" (click)="randomFill()">
+          Random Fill
+        </button>
         <button class="btn btn-outline-secondary" (click)="clear()">
           Clear
         </button>
@@ -133,14 +138,14 @@
         </div>
       </div>
     </div>
-  </div>
+  </bs-card>
 
   <!-- Results -->
   @if (isSolved) {
-    <div class="card">
-      <div class="card-header">
+    <bs-card class="d-block mb-3">
+      <bs-card-header>
         <h5 class="card-title mb-0">Result</h5>
-      </div>
+      </bs-card-header>
       <div class="card-body">
         <div class="mb-3">
           <label class="form-label fw-semibold">Sum of Products (SOP):</label>
@@ -176,18 +181,19 @@
           </div>
         }
       </div>
-    </div>
+    </bs-card>
   }
 
   <!-- Instructions -->
-  <div class="card mt-4">
-    <div class="card-header">
+  <bs-card class="d-block mb-3">
+    <bs-card-header>
       <h5 class="card-title mb-0">Instructions</h5>
-    </div>
+    </bs-card-header>
     <div class="card-body">
       <ul class="mb-0">
         <li>Use <strong>+/-</strong> buttons to add or remove variables</li>
         <li>Click on cells to toggle their values (0, 1, X for don't care)</li>
+        <li>Use <strong>Random Fill</strong> to populate the map with random values</li>
         <li>
           Keyboard shortcuts (when map is focused):
           <ul>
@@ -201,5 +207,5 @@
         <li>The small numbers in cells show the minterm index</li>
       </ul>
     </div>
-  </div>
-</div>
+  </bs-card>
+</bs-container>
