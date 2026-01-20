@@ -5,10 +5,7 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "types": [],
-    "paths": {
-      "@mintplayer/quine-mccluskey": ["../../../dist/libs/mintplayer/quine-mccluskey"]
-    }
+    "types": []
   },
   "include": ["src/**/*.ts"],
   "exclude": [

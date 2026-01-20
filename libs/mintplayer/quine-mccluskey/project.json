@@ -10,7 +10,7 @@
       "fallbackCurrentVersionResolver": "disk"
     }
   },
-  "tags": [],
+  "tags": ["scope:mintplayer"],
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",

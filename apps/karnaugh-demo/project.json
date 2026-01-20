@@ -4,7 +4,7 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/karnaugh-demo/src",
-  "tags": [],
+  "tags": ["scope:mintplayer"],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
