@@ -11,6 +11,7 @@ import { IRequiredLoop } from '@mintplayer/quine-mccluskey';
 import { BsCardModule } from '@mintplayer/ng-bootstrap/card';
 import { BsButtonGroupComponent } from '@mintplayer/ng-bootstrap/button-group';
 import { BsContainerComponent } from '@mintplayer/ng-bootstrap/container';
+import { BsGridModule } from '@mintplayer/ng-bootstrap/grid';
 
 @Component({
   imports: [
@@ -20,6 +21,7 @@ import { BsContainerComponent } from '@mintplayer/ng-bootstrap/container';
     BsCardModule,
     BsButtonGroupComponent,
     BsContainerComponent,
+    BsGridModule,
   ],
   selector: 'app-root',
   templateUrl: './app.html',
