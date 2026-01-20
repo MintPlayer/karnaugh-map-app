@@ -36,8 +36,10 @@ jobs:
 
       # Build first to ensure dist folders exist for typecheck
       - run: npx nx run-many -t build
-      # Then run remaining tasks
-      - run: npx nx run-many -t lint test typecheck e2e
+      # Run lint, test, typecheck
+      - run: npx nx run-many -t lint test typecheck
+      # Run e2e tests sequentially to avoid port conflicts and daemon issues
+      - run: npx nx run-many -t e2e --parallel=1
       # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
       - run: npx nx fix-ci
         if: always()

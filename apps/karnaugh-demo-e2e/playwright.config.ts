@@ -24,9 +24,9 @@ export default defineConfig({
   },
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npx nx run karnaugh-demo:serve --port=4201',
+    command: 'npx nx run karnaugh-demo:serve-static --port=4201',
     url: 'http://localhost:4201',
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env['CI'],
     cwd: workspaceRoot,
   },
   projects: [
