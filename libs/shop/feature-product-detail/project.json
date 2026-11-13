@@ -4,13 +4,18 @@
   "projectType": "library",
   "sourceRoot": "libs/shop/feature-product-detail/src",
   "prefix": "shop",
-  "tags": ["scope:shop", "type:feature"],
+  "tags": [
+    "scope:shop",
+    "type:feature"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
-        "reportsDirectory": "../../../coverage/libs/shop/feature-product-detail"
+        "reportsDirectory": "{projectRoot}/../../../coverage/libs/shop/feature-product-detail"
       }
     },
     "lint": {

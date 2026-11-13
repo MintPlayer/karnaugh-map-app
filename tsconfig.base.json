@@ -29,7 +29,12 @@
       "@mintplayer/ng-karnaugh-map": [
         "libs/mintplayer/ng-karnaugh-map/src/index.ts"
       ]
-    }
+    },
+    "strict": false,
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"],
+    "esModuleInterop": false,
+    "ignoreDeprecations": "6.0"
   },
   "exclude": ["node_modules", "tmp"]
 }

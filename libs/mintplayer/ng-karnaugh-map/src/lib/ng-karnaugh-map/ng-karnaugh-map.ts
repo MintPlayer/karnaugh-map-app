@@ -9,6 +9,7 @@ import {
   HostListener,
   ElementRef,
   inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -34,6 +35,7 @@ import {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './ng-karnaugh-map.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./ng-karnaugh-map.scss'],
 })
 export class NgKarnaughMapComponent implements OnInit, OnChanges {

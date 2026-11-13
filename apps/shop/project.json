@@ -4,15 +4,22 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/shop/src",
-  "tags": ["scope:shop"],
+  "tags": [
+    "scope:shop"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/shop",
         "browser": "apps/shop/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/shop/tsconfig.app.json",
         "assets": [
           {
@@ -20,7 +27,9 @@
             "input": "apps/shop/public"
           }
         ],
-        "styles": ["apps/shop/src/styles.css"],
+        "styles": [
+          "apps/shop/src/styles.css"
+        ],
         "server": "apps/shop/src/main.server.ts",
         "ssr": {
           "entry": "apps/shop/src/server.ts"
@@ -48,13 +57,18 @@
           "extractLicenses": false,
           "sourceMap": true
         }
-      },
-      "defaultConfiguration": "production"
+      }
     },
     "serve": {
-      "dependsOn": ["api:serve"],
+      "dependsOn": [
+        "api:serve"
+      ],
       "continuous": true,
       "executor": "@angular/build:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "proxyConfig": "apps/shop/proxy.conf.json"
+      },
       "configurations": {
         "production": {
           "buildTarget": "shop:build:production"
@@ -62,10 +76,6 @@
         "development": {
           "buildTarget": "shop:build:development"
         }
-      },
-      "defaultConfiguration": "development",
-      "options": {
-        "proxyConfig": "apps/shop/proxy.conf.json"
       }
     },
     "extract-i18n": {
@@ -79,17 +89,23 @@
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
-        "reportsDirectory": "../../coverage/apps/shop"
+        "reportsDirectory": "{projectRoot}/../../coverage/apps/shop"
       }
     },
     "serve-static": {
-      "dependsOn": ["copy-index"],
+      "dependsOn": [
+        "copy-index"
+      ],
       "command": "npx http-server dist/apps/shop/browser -p 4300 -a localhost --proxy http://localhost:4300?"
     },
     "copy-index": {
-      "dependsOn": ["build"],
+      "dependsOn": [
+        "build"
+      ],
       "cache": false,
       "command": "node -e \"require('fs').copyFileSync('dist/apps/shop/browser/index.csr.html', 'dist/apps/shop/browser/index.html')\""
     }

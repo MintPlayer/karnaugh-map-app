@@ -4,13 +4,18 @@
   "sourceRoot": "libs/shop/data/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["scope:shop", "type:data"],
+  "tags": [
+    "scope:shop",
+    "type:data"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
-        "reportsDirectory": "../../../coverage/libs/shop/data"
+        "reportsDirectory": "{projectRoot}/../../../coverage/libs/shop/data"
       }
     },
     "lint": {
