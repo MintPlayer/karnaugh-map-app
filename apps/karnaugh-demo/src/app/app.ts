@@ -33,6 +33,8 @@ import {
   ],
   selector: 'app-root',
   templateUrl: './app.html',
+  // Eager keeps the pre-Angular-22 default (added by the change-detection-eager migration).
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.scss',
 })

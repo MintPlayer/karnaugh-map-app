@@ -54,8 +54,8 @@
     "@types/node": "20.19.9",
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/utils": "^8.72.2",
-    "@vitest/coverage-v8": "4.0.9",
-    "@vitest/ui": "4.0.9",
+    "@vitest/coverage-v8": "4.1.12",
+    "@vitest/ui": "4.1.12",
     "angular-eslint": "22.6.0",
     "autoprefixer": "^10.4.0",
     "esbuild": "^0.28.2",
@@ -77,7 +77,7 @@
     "typescript-eslint": "^8.72.2",
     "verdaccio": "^6.9.3",
     "vite": "^8.3.8",
-    "vitest": "4.0.9"
+    "vitest": "4.1.12"
   },
   "nx": {
     "includedScripts": []

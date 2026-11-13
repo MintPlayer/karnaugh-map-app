@@ -13,7 +13,7 @@
     </bs-card-header>
     <bs-grid>
       <div bsRow class="g-3 align-items-end">
-        <div [col]>
+        <div col>
           <label class="form-label me-3">Number of Variables</label>
           <bs-button-group>
             <button
@@ -35,7 +35,7 @@
           </bs-button-group>
         </div>
 
-        <div [col]>
+        <div col>
           <label class="form-label">Variable Names</label>
           <div class="d-flex flex-wrap gap-2">
             @for (variable of inputVariables; track $index) {
@@ -51,7 +51,7 @@
           </div>
         </div>
 
-        <div [col]>
+        <div col>
           <label class="form-label">Output</label>
           <input
             type="text"
