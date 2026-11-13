@@ -1,0 +1,20 @@
+# Deployed to /var/www/karnaugh on the VPS by the `deploy` job in
+# .github/workflows/publish.yml, which fetches this file from `main` and runs
+# `docker compose pull && docker compose up -d`. Traefik (on the external `web`
+# network) terminates TLS and routes karnaugh.mintplayer.com to nginx on :80.
+services:
+  karnaugh:
+    image: ghcr.io/mintplayer/karnaugh-map-app:main
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.karnaugh.rule=Host(`karnaugh.mintplayer.com`)"
+      - "traefik.http.routers.karnaugh.entrypoints=websecure"
+      - "traefik.http.routers.karnaugh.tls.certresolver=letsencrypt"
+      - "traefik.http.services.karnaugh.loadbalancer.server.port=80"
+    networks:
+      - web
+    restart: unless-stopped
+
+networks:
+  web:
+    external: true

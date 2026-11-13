@@ -15,7 +15,7 @@ permissions:
 jobs:
   build-and-publish:
     name: Build and Publish
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     permissions:
       contents: read
@@ -59,8 +59,61 @@ jobs:
           subject-digest: ${{ steps.push-ghcr.outputs.digest }}
           push-to-registry: true
 
-      - name: Trigger deploy hook
-        uses: fjogeleit/http-request-action@v1
+      # GHCR packages default to private on first publish, and the VPS's
+      # `docker compose pull` then fails with 'denied'. PATCH is idempotent:
+      # an already-public package returns 204. A 403/404 is swallowed so a
+      # misconfigured token doesn't fail the job.
+      - name: Make the image public
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGE: ${{ github.event.repository.name }}
+        run: |
+          gh api --method PATCH \
+            "/orgs/${{ github.repository_owner }}/packages/container/$PACKAGE" \
+            -f visibility=public 2>&1 || echo "  (skipped — already public, missing, or insufficient scope)"
+
+  # Pulls the image from GHCR and recreates the container on the VPS. Same
+  # shape as mintplayer-ng-bootstrap's deploy; the VPS_* secrets are
+  # organization secrets. Replaces the Sliplane deploy hook (issue #4).
+  deploy:
+    name: deploy
+    runs-on: ubuntu-26.04
+    needs: [build-and-publish]
+    if: github.ref == 'refs/heads/main'
+    timeout-minutes: 10
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.2.5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          url: ${{ secrets.SLIPLANE_DEPLOY_HOOK }}
-          method: GET
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          passphrase: ${{ secrets.VPS_SSH_KEY_PASSPHRASE }}
+          envs: GITHUB_TOKEN
+          script: |
+            set -e
+            mkdir -p /var/www/karnaugh
+            cd /var/www/karnaugh
+
+            # Download the latest docker-compose.yml from the repository
+            rm -f docker-compose.yml
+            curl -sf -H "Authorization: token $GITHUB_TOKEN" -o docker-compose.yml https://raw.githubusercontent.com/${{ github.repository }}/main/docker-compose.yml
+
+            # Log in to GHCR using the workflow's GITHUB_TOKEN
+            echo "$GITHUB_TOKEN" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            # Pull the latest image and recreate only what changed. No `down`
+            # first: that would stop the site before the new container starts.
+            docker compose pull
+            docker compose up -d --remove-orphans
+
+            # Clean up old images
+            docker image prune -f

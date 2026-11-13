@@ -1,5 +1,5 @@
 # Stage 1: Build the Angular SSR application
-FROM node:22-alpine AS build
+FROM node:24-alpine AS build
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ COPY . .
 RUN npx nx build shop --configuration=production
 
 # Stage 2: Production image
-FROM node:22-alpine AS production
+FROM node:24-alpine AS production
 
 LABEL org.opencontainers.image.source="https://github.com/MintPlayer/karnaugh-map-app"
 
