@@ -4,22 +4,16 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/shop/src",
-  "tags": [
-    "scope:shop"
-  ],
+  "tags": ["scope:shop"],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/shop",
         "browser": "apps/shop/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "polyfills": ["zone.js"],
         "tsConfig": "apps/shop/tsconfig.app.json",
         "assets": [
           {
@@ -27,9 +21,7 @@
             "input": "apps/shop/public"
           }
         ],
-        "styles": [
-          "apps/shop/src/styles.css"
-        ],
+        "styles": ["apps/shop/src/styles.css"],
         "server": "apps/shop/src/main.server.ts",
         "ssr": {
           "entry": "apps/shop/src/server.ts"
@@ -60,9 +52,7 @@
       }
     },
     "serve": {
-      "dependsOn": [
-        "api:serve"
-      ],
+      "dependsOn": ["api:serve"],
       "continuous": true,
       "executor": "@angular/build:dev-server",
       "defaultConfiguration": "development",
@@ -76,6 +66,9 @@
         "development": {
           "buildTarget": "shop:build:development"
         }
+      },
+      "readyWhen": {
+        "signal": true
       }
     },
     "extract-i18n": {
@@ -85,27 +78,33 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     },
     "test": {
-      "executor": "@nx/vitest:test",
       "outputs": [
-        "{options.reportsDirectory}"
+        "{projectRoot}/{options.coverage.reportsDirectory}",
+        "{workspaceRoot}/coverage/apps/shop"
       ],
       "options": {
-        "reportsDirectory": "{projectRoot}/../../coverage/apps/shop"
+        "coverage.reportsDirectory": "../../coverage/apps/shop"
       }
     },
     "serve-static": {
-      "dependsOn": [
-        "copy-index"
-      ],
+      "dependsOn": ["copy-index"],
       "command": "npx http-server dist/apps/shop/browser -p 4300 -a localhost --proxy http://localhost:4300?"
     },
     "copy-index": {
-      "dependsOn": [
-        "build"
-      ],
+      "dependsOn": ["build"],
       "cache": false,
       "command": "node -e \"require('fs').copyFileSync('dist/apps/shop/browser/index.csr.html', 'dist/apps/shop/browser/index.html')\""
     }

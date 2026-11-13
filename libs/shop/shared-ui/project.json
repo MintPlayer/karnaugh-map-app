@@ -4,22 +4,29 @@
   "sourceRoot": "libs/shop/shared-ui/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [
-    "scope:shop",
-    "type:ui"
-  ],
+  "tags": ["scope:shop", "type:ui"],
   "targets": {
     "test": {
-      "executor": "@nx/vitest:test",
       "outputs": [
-        "{options.reportsDirectory}"
+        "{projectRoot}/{options.coverage.reportsDirectory}",
+        "{workspaceRoot}/coverage/libs/shop/shared-ui"
       ],
       "options": {
-        "reportsDirectory": "{projectRoot}/../../../coverage/libs/shop/shared-ui"
+        "coverage.reportsDirectory": "../../../coverage/libs/shop/shared-ui"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     }
   }
 }

@@ -4,22 +4,29 @@
   "projectType": "library",
   "sourceRoot": "libs/shop/feature-products/src",
   "prefix": "shop",
-  "tags": [
-    "scope:shop",
-    "type:feature"
-  ],
+  "tags": ["scope:shop", "type:feature"],
   "targets": {
     "test": {
-      "executor": "@nx/vitest:test",
       "outputs": [
-        "{options.reportsDirectory}"
+        "{projectRoot}/{options.coverage.reportsDirectory}",
+        "{workspaceRoot}/coverage/libs/shop/feature-products"
       ],
       "options": {
-        "reportsDirectory": "{projectRoot}/../../../coverage/libs/shop/feature-products"
+        "coverage.reportsDirectory": "../../../coverage/libs/shop/feature-products"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     }
   }
 }
