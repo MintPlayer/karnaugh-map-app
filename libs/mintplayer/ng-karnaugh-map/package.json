@@ -2,8 +2,8 @@
   "name": "@mintplayer/ng-karnaugh-map",
   "version": "21.0.0",
   "peerDependencies": {
-    "@angular/common": "^21.0.0",
-    "@angular/core": "^21.0.0"
+    "@angular/common": "^22.0.0",
+    "@angular/core": "^22.0.0"
   },
   "dependencies": {
     "@mintplayer/quine-mccluskey": "1.0.0"

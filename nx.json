@@ -20,15 +20,6 @@
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     },
-    "@nx/eslint:lint": {
-      "cache": true,
-      "inputs": [
-        "default",
-        "{workspaceRoot}/.eslintrc.json",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs"
-      ]
-    },
     "@nx/esbuild:esbuild": {
       "cache": true,
       "dependsOn": ["^build"],
@@ -38,10 +29,6 @@
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
-    },
-    "@nx/vitest:test": {
-      "cache": true,
-      "inputs": ["default", "^production"]
     },
     "@nx/angular:package": {
       "cache": true,
@@ -80,6 +67,14 @@
       }
     },
     {
+      "plugin": "@nx/js/typescript",
+      "options": {
+        "typecheck": {
+          "targetName": "typecheck"
+        }
+      }
+    },
+    {
       "plugin": "@nx/vite/plugin",
       "options": {
         "buildTargetName": "build",
@@ -97,6 +92,20 @@
       "options": {
         "testTargetName": "vite:test"
       }
+    },
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testMode": "watch",
+        "testTargetName": "test"
+      },
+      "include": [
+        "apps/shop/**/*",
+        "libs/shop/data/**/*",
+        "libs/shop/feature-product-detail/**/*",
+        "libs/shop/feature-products/**/*",
+        "libs/shop/shared-ui/**/*"
+      ]
     }
   ],
   "generators": {
@@ -114,5 +123,8 @@
       "style": "css"
     }
   },
-  "nxCloudId": "696fbb4a2e4e152b0a0f95fa"
+  "nxCloudId": "696fbb4a2e4e152b0a0f95fa",
+  "affected": {
+    "legacy": true
+  }
 }

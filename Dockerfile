@@ -1,7 +1,7 @@
 # Stage 1: Compile and Build angular codebase
 
 # Use official node image as the base image
-FROM node:latest as node_image
+FROM node:24 AS node_image
 
 # Set the working directory
 WORKDIR /usr/local/app

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -8,23 +8,34 @@ import {
   IKarnaughMapSolvedEvent,
 } from '@mintplayer/ng-karnaugh-map';
 import { IRequiredLoop } from '@mintplayer/quine-mccluskey';
-import { BsCardModule } from '@mintplayer/ng-bootstrap/card';
+import {
+  BsCardComponent,
+  BsCardHeaderComponent,
+} from '@mintplayer/ng-bootstrap/card';
 import { BsButtonGroupComponent } from '@mintplayer/ng-bootstrap/button-group';
-import { BsContainerComponent } from '@mintplayer/ng-bootstrap/container';
-import { BsGridModule } from '@mintplayer/ng-bootstrap/grid';
+import {
+  BsGridColDirective,
+  BsGridComponent,
+  BsGridRowDirective,
+} from '@mintplayer/ng-bootstrap/grid';
 
 @Component({
   imports: [
     CommonModule,
     FormsModule,
     NgKarnaughMapComponent,
-    BsCardModule,
+    BsCardComponent,
+    BsCardHeaderComponent,
     BsButtonGroupComponent,
-    BsContainerComponent,
-    BsGridModule,
+    BsGridComponent,
+    BsGridRowDirective,
+    BsGridColDirective,
   ],
   selector: 'app-root',
   templateUrl: './app.html',
+  // Eager keeps the pre-Angular-22 default (added by the change-detection-eager migration).
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.scss',
 })
 export class App {

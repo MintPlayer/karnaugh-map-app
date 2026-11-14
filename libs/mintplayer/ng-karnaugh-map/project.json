@@ -18,6 +18,7 @@
       "executor": "@nx/angular:package",
       "dependsOn": ["quine-mccluskey:build"],
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "defaultConfiguration": "production",
       "options": {
         "project": "libs/mintplayer/ng-karnaugh-map/ng-package.json",
         "tsConfig": "libs/mintplayer/ng-karnaugh-map/tsconfig.lib.json"
@@ -27,8 +28,7 @@
           "tsConfig": "libs/mintplayer/ng-karnaugh-map/tsconfig.lib.prod.json"
         },
         "development": {}
-      },
-      "defaultConfiguration": "production"
+      }
     },
     "nx-release-publish": {
       "options": {
@@ -36,7 +36,17 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     }
   }
 }

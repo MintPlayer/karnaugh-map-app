@@ -30,19 +30,11 @@ export default defineConfig({
     cwd: workspaceRoot,
   },
   projects: [
+    // Chromium only: CI runs e2e inside the Playwright image that matches the
+    // lockfile, and one engine keeps that job fast (issue #4).
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-    },
-
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
     },
 
     // Uncomment for mobile browsers support

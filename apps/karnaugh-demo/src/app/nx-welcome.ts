@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -939,6 +939,9 @@ nx g &#64;nx/angular:component ui/src/lib/button</pre>
     </div>
   `,
   styles: [],
+  // Eager keeps the pre-Angular-22 default (added by the change-detection-eager migration).
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+  changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.None,
 })
 export class NxWelcome {}
